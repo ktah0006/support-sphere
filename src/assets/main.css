@@ -5,31 +5,41 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  background-color: transparent;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
+:root {
+  --color-background: #efeaf8;
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+    font-family: 'Arial';
+    background-color: var(--color-background);
+    min-height: 100vh;
+    margin: 0;
   }
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.button {
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+  color: #3a2d4a;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  padding: 8px 18px;
+}
+
+.button.active,
+.router-link-exact-active.button {
+  border: 1px solid #ffffff;
+  background-color: #6929ff;
+  color: #f5f5f5;
+}
+
+.button:hover:not(.active):not(.router-link-exact-active) {
+  border: 1px solid #6929ff;
 }
