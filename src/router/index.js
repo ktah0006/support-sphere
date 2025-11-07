@@ -1,23 +1,57 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AdminLogin from '@/views/AdminLogin.vue'
+import MemberLogin from '@/views/MemberLogin.vue'
+import CommunityFeed from '@/views/CommunityFeed.vue'
+import FeedAnalytics from '@/views/FeedAnalytics.vue'
+import MemberSignUp from '@/views/MemberSignUp.vue'
+import UserManager from '@/views/UserManager.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView,
+  },
+  {
+    path: '/admin-login',
+    name: 'adminLogin',
+    component: AdminLogin,
+  },
+  {
+    path: '/member-login',
+    name: 'memberLogin',
+    component: MemberLogin,
+  },
+
+  {
+    path: '/member-signup',
+    name: 'memberSignUp',
+    component: MemberSignUp,
+  },
+
+  {
+    path: '/community-feed',
+    name: 'communityFeed',
+    component: CommunityFeed,
+  },
+
+  {
+    path: '/feed-analytics',
+    name: 'feedAnalytics',
+    component: FeedAnalytics,
+  },
+
+  {
+    path: '/user-manager',
+    name: 'userManager',
+    component: UserManager,
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-  ],
+  routes,
 })
 
 export default router
