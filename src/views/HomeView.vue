@@ -1,24 +1,3 @@
-<!-- <template>
-  <div class="homeview">
-    <h1>HOME</h1>
-  </div>
-</template> -->
-
-<script setup>
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import logo from '@/assets/ss_logo.png'
-import { useRouter } from 'vue-router'
-import { Button } from '@/components/ui/button'
-const router = useRouter()
-</script>
-
 <template>
   <main
     class="min-h-screen flex flex-col items-center justify-center text-black px-4"
@@ -70,3 +49,18 @@ const router = useRouter()
     </Card>
   </main>
 </template>
+
+<script setup>
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import logo from '@/assets/ss_logo.png'
+import { useRouter } from 'vue-router'
+import { Button } from '@/components/ui/button'
+const router = useRouter()
+</script>
