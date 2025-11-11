@@ -99,76 +99,29 @@ const switchMenu = () => {
 <script setup lang="js">
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from '@/components/ui/navigation-menu'
 
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
-
-// const navLinks = [
-//   {
-//     path: '/',
-//     name: 'home',
-//   },
-//   {
-//     path: '/admin-login',
-//     name: 'adminLogin',
-//   },
-//   {
-//     path: '/member-login',
-//     name: 'memberLogin',
-//   },
-
-//   {
-//     path: '/member-signup',
-//     name: 'memberSignUp',
-//   },
-
-//   {
-//     path: '/community-feed',
-//     name: 'communityFeed',
-//   },
-
-//   {
-//     path: '/feed-analytics',
-//     name: 'feedAnalytics',
-//   },
-
-//   {
-//     path: '/user-manager',
-//     name: 'userManager',
-//   },
-// ]
 import { routes } from '@/router/index.js'
 import { ref } from 'vue'
 const menuOpen = ref(false)
 </script>
 
 <template>
-  <nav class="bg-white">
+  <nav class="bg-white w-full inset-x-0 fixed top-0">
     <div class="flex h-16 items-center justify-between px-5">
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
@@ -205,24 +158,38 @@ const menuOpen = ref(false)
         <NavigationMenuList class="">
           <NavigationMenuItem v-for="link in routes" :key="link.path">
             <NavigationMenuLink as-child>
-              <RouterLink
-                :to="link.path"
-                class="text-sm font-medium transition-colors hover:text-primary"
-                :class="{ 'text-primary font-semibold': route.path === link.path }"
-              >
-                {{ link.name }}
+              <RouterLink :to="link.path">
+                <Button
+                  :key="link.path"
+                  :variant="route.path === link.path ? 'bold' : 'outline'"
+                  @click="router.push(link.path)"
+                  :aria-current="route.path === link.path ? 'page' : false"
+                  role="link"
+                >
+                  {{ link.name }}
+                </Button>
               </RouterLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
-      <!-- Right-side buttons -->
-      <div class="hidden md:block flex items-center gap-2">
-        <Button variant="outline" class="w-full" @click="router.push('/member-login')"
+      <div class="flex flex-row justify-center items-center gap-4">
+        <Button
+          role="button"
+          aria-label="sign into account"
+          variant="bold"
+          @click="router.push('/member-login')"
           >Login
         </Button>
-        <Button class="w-full" @click="router.push('/member-signup')"> Sign up </Button>
+        <Button
+          role="button"
+          aria-label="sign up for account"
+          variant="bold"
+          @click="router.push('/member-signup')"
+        >
+          Sign up
+        </Button>
       </div>
     </div>
   </nav>

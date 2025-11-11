@@ -6,8 +6,11 @@
 body {
   font-family: 'Arial';
   background-color: #efeaf8;
-  min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
+  /* padding: 70px 20px; */
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 /* @import './base.css';
 

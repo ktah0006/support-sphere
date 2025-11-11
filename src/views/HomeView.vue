@@ -5,30 +5,68 @@
 </template> -->
 
 <script setup>
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import logo from '@/assets/ss_logo.png'
-import { routes } from '@/router/index.js'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
 const router = useRouter()
-const route = useRoute()
 </script>
 
 <template>
-  <main class="min-h-screen flex flex-col items-center justify-center bg-white text-gray-900 px-4">
-    <!-- Accessible logo and app name -->
-    <header class="flex flex-col items-center mb-6 text-center">
-      <img :src="logo" alt="SupportSphere logo" class="w-32 h-auto mb-4" />
-      <h1 class="text-3xl md:text-4xl font-bold tracking-tight">
-        Welcome to <span class="text-primary">SupportSphere</span>
-      </h1>
-      <p class="mt-2 text-gray-700 max-w-prose">
-        Connecting members and communities through a responsive, accessible experience.
-      </p>
-    </header>
-
-    <div class="hidden md:block flex items-center gap-2">
-      <Button variant="outline" class="w-full" @click="router.push('/member-login')">Login </Button>
-      <Button class="w-full" @click="router.push('/member-signup')"> Sign up </Button>
-    </div>
+  <main
+    class="min-h-screen flex flex-col items-center justify-center text-black px-4"
+    id="main-content"
+  >
+    <Card
+      role="region"
+      aria-labelledby="welcome-message"
+      class="w-full max-w-md md:max-w-lg lg:max-w-xl shadow-lg rounded-2xl p-6"
+    >
+      <CardHeader>
+        <div class="flex justify-center">
+          <img :src="logo" alt="SupportSphere logo" class="w-32" />
+        </div>
+        <CardTitle
+          ><h1
+            class="text-3xl font-bold tracking-tight text-center hidden md:block"
+            id="welcome-message"
+          >
+            Welcome to SupportSphere
+          </h1></CardTitle
+        >
+        <CardDescription class="text-black hidden md:block text-center"
+          >Support Sphere is an online social platform for people living with disabilities. Join
+          this supportive, and safe environment where members can build long-lasting emotional
+          connections</CardDescription
+        >
+      </CardHeader>
+      <CardContent>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
+          <Button
+            role="button"
+            aria-label="sign into account"
+            variant="bold"
+            @click="router.push('/member-login')"
+            >Login
+          </Button>
+          <Button
+            role="button"
+            aria-label="sign up for account"
+            variant="bold"
+            @click="router.push('/member-signup')"
+          >
+            Sign up
+          </Button>
+        </div>
+      </CardContent>
+      <CardFooter class="sr-only"> end of the welcome page </CardFooter>
+    </Card>
   </main>
 </template>

@@ -1,12 +1,15 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
-import { Button } from '@/components/ui/button'
 </script>
 
 <template>
-  <NavBar />
-  <RouterView />
+  <header>
+    <NavBar />
+  </header>
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <!-- <style scoped>
