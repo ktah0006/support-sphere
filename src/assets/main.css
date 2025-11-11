@@ -1,8 +1,16 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: 'Arial';
+  background-color: #efeaf8;
+  min-height: 100vh;
+  margin: 0;
+}
 /* @import './base.css';
+
 
 #app {
   max-width: 1280px;

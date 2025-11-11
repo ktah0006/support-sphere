@@ -7,7 +7,7 @@ import FeedAnalytics from '@/views/FeedAnalytics.vue'
 import MemberSignUp from '@/views/MemberSignUp.vue'
 import UserManager from '@/views/UserManager.vue'
 
-const routes = [
+export const routes = [
   {
     path: '/',
     name: 'home',

@@ -5,9 +5,6 @@ import { Button } from '@/components/ui/button'
 </script>
 
 <template>
-  <div>
-    <Button variant="destructive">Click me</Button>
-  </div>
   <NavBar />
   <RouterView />
 </template>
