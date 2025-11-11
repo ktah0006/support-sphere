@@ -1,5 +1,9 @@
-<template>
-  <nav class="navbar navbar-expand-lg navbar-fixed-top my-navbar" role="navigation">
+<!-- <template>
+  <nav
+    class="navbar navbar-expand-lg navbar-fixed-top my-navbar"
+    :class="{ 'menu-open': menuOpen }"
+    role="navigation"
+  >
     <div class="navbar-inner container-fluid">
       <div class="d-flex justify-content-end">
         <button
@@ -10,6 +14,7 @@
           aria-controls="navbarLinks"
           aria-expanded="false"
           aria-label="Toggle Navigation Links"
+          @click="switchMenu"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -68,16 +73,51 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   width: 100vw;
 }
-.my-navbar .navbar-inner {
-  padding-left: 0px;
-  padding-right: 0px;
-  top: 0;
-  margin-top: 0 !important;
+
+.my-navbar.menu-open {
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.navbar-collapse {
-  padding: 0.5rem 0;
+@media (max-width: 991.98px) {
+  .my-navbar {
+    background-color: transparent;
+    box-shadow: none;
+  }
 }
 </style>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const menuOpen = ref(false)
+const switchMenu = () => {
+  menuOpen.value = !menuOpen.value
+}
+</script> -->
+
+<script setup lang="ts">
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from '@/components/ui/navigation-menu'
+</script>
+
+<template>
+  <NavigationMenu>
+    <NavigationMenuList>
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <NavigationMenuLink>Link</NavigationMenuLink>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    </NavigationMenuList>
+  </NavigationMenu>
+</template>

@@ -1,14 +1,18 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
+import { Button } from '@/components/ui/button'
 </script>
 
 <template>
+  <div>
+    <Button variant="destructive">Click me</Button>
+  </div>
   <NavBar />
   <RouterView />
 </template>
 
-<style scoped>
+<!-- <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -70,4 +74,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style> -->
