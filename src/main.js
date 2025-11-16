@@ -22,6 +22,11 @@ auth.onAuthStateChanged(async (user) => {
     const isAdmin = !!token.claims.admin
     store.setAdminStatus(isAdmin)
     user.isAdmin = !!token.claims.admin
+    console.log('LOGGED IN')
+  } else {
+    // logged out  ⬅️ THIS WAS MISSING
+    store.setUserState(null)
+    store.setAdminStatus(false)
   }
 })
 
