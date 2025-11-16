@@ -2,20 +2,27 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import router from './router'
-
-// Bootstrap
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-// import 'bootstrap-vue-next/dist/bootstrap-vue-next.css' // ← Vue-specific styles
-// import { BootstrapVueNext } from 'bootstrap-vue-next'
+import './firebase/init'
+import { auth } from '@/firebase/init.js'
+import { userStore } from './store/store'
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-// app.use(BootstrapVueNext)
+
+auth.onAuthStateChanged(async (user) => {
+  const store = userStore()
+
+  if (user) {
+    store.setUserState(user)
+    const token = await user.getIdTokenResult(true)
+    const isAdmin = !!token.claims.admin
+    store.setAdminStatus(isAdmin)
+    user.isAdmin = !!token.claims.admin
+  }
+})
 
 app.mount('#app')
