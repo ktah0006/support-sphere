@@ -3,15 +3,17 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+const app = createApp(App)
+app.use(createPinia())
+
 import router from './router'
 import './firebase/init'
 import { auth } from '@/firebase/init.js'
 import { userStore } from './store/store'
 
-const app = createApp(App)
-
-app.use(createPinia())
 app.use(router)
+
+let appMounted = false
 
 auth.onAuthStateChanged(async (user) => {
   const store = userStore()
@@ -24,10 +26,16 @@ auth.onAuthStateChanged(async (user) => {
     user.isAdmin = !!token.claims.admin
     console.log('LOGGED IN')
   } else {
-    // logged out  ⬅️ THIS WAS MISSING
     store.setUserState(null)
     store.setAdminStatus(false)
   }
+
+  store.authenticationComplete()
+
+  if (!appMounted) {
+    app.mount('#app')
+    appMounted = true
+  }
 })
 
-app.mount('#app')
+// app.mount('#app')

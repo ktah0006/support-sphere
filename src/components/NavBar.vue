@@ -1,6 +1,6 @@
 <!-- Component adapted from ShadCN UI -->
 <template>
-  <nav class="bg-white w-full inset-x-0 fixed top-0">
+  <nav class="bg-white shadow fixed top-0 inset-x-0 z-50">
     <div class="flex h-16 items-center justify-between px-5">
       <DropdownMenu>
         <DropdownMenuTrigger as-child>

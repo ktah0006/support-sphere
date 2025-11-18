@@ -64,13 +64,18 @@ const router = createRouter({
 // only allow login and signup pages if user is not logged in
 router.beforeEach((to, from, next) => {
   const user = userStore()
+
+  if (!user.isAuthReady()) {
+    return next()
+  }
+
   const isAuthenticated = !!user.userState
   const isAdmin = user.isAdmin
   console.log('isAuthenticated: ', isAuthenticated, ' isAdmin: ', isAdmin)
 
   // try to access pages while logged out
   if (to.meta.authOnly && !isAuthenticated) {
-    return next('/member-login')
+    return next('/user-login')
   }
   // try to access admin pages while logged in as a regular member
   if (to.meta.adminOnly && !isAdmin) {

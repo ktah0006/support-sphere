@@ -4,6 +4,7 @@ export const userStore = defineStore('userState', {
   state: () => ({
     isAdmin: false,
     userState: null,
+    authComplete: false,
   }),
 
   actions: {
@@ -12,6 +13,12 @@ export const userStore = defineStore('userState', {
     },
     setAdminStatus(isAdmin) {
       this.isAdmin = isAdmin
+    },
+    authenticationComplete() {
+      this.authComplete = true
+    },
+    isAuthReady() {
+      return this.authComplete
     },
   },
 })
