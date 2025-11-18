@@ -1,6 +1,5 @@
 <!-- Component adapted from ShadCN UI -->
 <template>
-  <pre>{{ JSON.stringify(allowedRoutes.value, null, 2) }}</pre>
   <nav class="bg-white w-full inset-x-0 fixed top-0">
     <div class="flex h-16 items-center justify-between px-5">
       <DropdownMenu>
@@ -20,36 +19,6 @@
           </DropdownMenuItem>
 
           <hr class="my-2 border-t border-muted" />
-
-          <!-- Buttons in Dropdown -->
-          <DropdownMenuItem as-child>
-            <Button
-              variant="outline"
-              class="w-full"
-              @click="router.push('/member-login')"
-              v-if="!isAuthenticated"
-            >
-              Login
-            </Button>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem as-child>
-            <Button class="w-full" @click="router.push('/member-signup')" v-if="!isAuthenticated">
-              Sign up
-            </Button>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem as-child>
-            <Button
-              role="button"
-              aria-label="lougout of account"
-              variant="destructive"
-              @click="logout"
-              v-if="isAuthenticated"
-            >
-              Logout
-            </Button></DropdownMenuItem
-          >
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -74,11 +43,12 @@
       </NavigationMenu>
 
       <div class="flex flex-row justify-center items-center gap-4">
+        <Badge variant="adminLabel" v-if="isAdmin"> Admin </Badge>
         <Button
           role="button"
           aria-label="sign into account"
           variant="bold"
-          @click="router.push('/member-login')"
+          @click="router.push('/user-login')"
           v-if="!isAuthenticated"
           >Login
         </Button>
@@ -106,6 +76,7 @@
 </template>
 
 <script setup lang="js">
+import { Badge } from '@/components/ui/badge'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -136,10 +107,16 @@ const isAdmin = computed(() => user.isAdmin)
 
 const allowedRoutes = computed(() =>
   routes.filter((allowedRoute) => {
+    // don't display anything except login, signup and home page is not logged in
     if (allowedRoute.meta?.authOnly && !isAuthenticated.value) {
       return false
     }
+    // don't display admin only pages if the user isn't an admin
     if (allowedRoute.meta?.adminOnly && !isAdmin.value) {
+      return false
+    }
+    // don't display login and signup links on the LHS of the navbar
+    if (!allowedRoute.meta?.mainNav) {
       return false
     }
     return true
@@ -150,7 +127,7 @@ const logout = async () => {
   try {
     await signOut(auth)
     console.log('signed out of firebase')
-    router.push('/member-login')
+    router.push('/user-login')
     console.log(auth.currentUser)
   } catch (error) {
     console.log('error during logout', error.code)

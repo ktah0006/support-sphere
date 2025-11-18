@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AdminLogin from '@/views/AdminLogin.vue'
-import MemberLogin from '@/views/MemberLogin.vue'
+import UserLogin from '@/views/UserLogin.vue'
 import CommunityFeed from '@/views/CommunityFeed.vue'
 import FeedAnalytics from '@/views/FeedAnalytics.vue'
 import MemberSignUp from '@/views/MemberSignUp.vue'
@@ -11,49 +10,49 @@ import { userStore } from '../store/store'
 export const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView,
-    meta: { authOnly: false, adminOnly: false },
+    meta: { authOnly: false, adminOnly: false, noAuthOnly: false, mainNav: true },
   },
+  // {
+  //   path: '/admin-login',
+  //   name: 'adminLogin',
+  //   component: AdminLogin,
+  //   meta: { authOnly: false, adminOnly: false },
+  // },
   {
-    path: '/admin-login',
-    name: 'adminLogin',
-    component: AdminLogin,
-    meta: { authOnly: false, adminOnly: false },
-  },
-  {
-    path: '/member-login',
-    name: 'memberLogin',
-    component: MemberLogin,
-    meta: { authOnly: false, adminOnly: false },
+    path: '/user-login',
+    name: 'Login',
+    component: UserLogin,
+    meta: { authOnly: false, adminOnly: false, noAuthOnly: true, mainNav: false },
   },
 
   {
     path: '/member-signup',
-    name: 'memberSignUp',
+    name: 'Sign Up',
     component: MemberSignUp,
-    meta: { authOnly: false, adminOnly: false },
+    meta: { authOnly: false, adminOnly: false, noAuthOnly: false, mainNav: false },
   },
 
   {
     path: '/community-feed',
-    name: 'communityFeed',
+    name: 'Community Feed',
     component: CommunityFeed,
-    meta: { authOnly: true, adminOnly: false },
+    meta: { authOnly: true, adminOnly: false, noAuthOnly: false, mainNav: true },
   },
 
   {
     path: '/feed-analytics',
-    name: 'feedAnalytics',
+    name: 'Analytics',
     component: FeedAnalytics,
-    meta: { authOnly: true, adminOnly: true },
+    meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
   },
 
   {
     path: '/user-manager',
-    name: 'userManager',
+    name: 'User Manager',
     component: UserManager,
-    meta: { authOnly: true, adminOnly: true },
+    meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
   },
 ]
 
@@ -69,10 +68,16 @@ router.beforeEach((to, from, next) => {
   const isAdmin = user.isAdmin
   console.log('isAuthenticated: ', isAuthenticated, ' isAdmin: ', isAdmin)
 
+  // try to access pages while logged out
   if (to.meta.authOnly && !isAuthenticated) {
     return next('/member-login')
   }
+  // try to access admin pages while logged in as a regular member
   if (to.meta.adminOnly && !isAdmin) {
+    return next('/')
+  }
+  // try to access login page when logged in
+  if (to.meta.noAuthOnly && isAuthenticated) {
     return next('/')
   }
 

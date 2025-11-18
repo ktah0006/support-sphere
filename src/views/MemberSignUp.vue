@@ -1,11 +1,13 @@
 <template>
   <main class="min-h-screen flex justify-center items-center">
-    <Card class="w-[350px]">
+    <Card class="w-[350px]" role="region" aria-label="sign up form">
       <CardHeader>
         <div class="flex justify-center">
           <img :src="logo" alt="SupportSphere logo" class="w-32" />
         </div>
-        <CardTitle class="flex justify-center text-3xl text-[#6929FF]">Create Account</CardTitle>
+        <CardTitle class="hidden sm:flex justify-center text-3xl text-[#6929FF]"
+          >Create Account</CardTitle
+        >
         <CardDescription class="text-black hidden md:block text-center"
           >Become a Member and join community to connect, share, and grow together</CardDescription
         >
@@ -51,7 +53,6 @@ import { Label } from '@/components/ui/label'
 import logo from '@/assets/ss_logo.png'
 
 import { ref } from 'vue'
-// import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase/init'
@@ -59,12 +60,11 @@ import { auth } from '@/firebase/init'
 const email = ref('')
 const password = ref('')
 const router = useRouter()
-// const auth = getAuth()
 const register = () => {
   createUserWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
       console.log('Firebase Register Successful!')
-      router.push('/member-login')
+      router.push('/')
     })
     .catch((error) => {
       console.log(error.code)

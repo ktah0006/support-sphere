@@ -5,7 +5,7 @@
   >
     <Card
       role="region"
-      aria-labelledby="welcome-message"
+      aria-label="welcome message"
       class="w-full max-w-md md:max-w-lg lg:max-w-xl shadow-lg rounded-2xl p-6"
     >
       <CardHeader>
@@ -32,7 +32,7 @@
             role="button"
             aria-label="sign into account"
             variant="bold"
-            @click="router.push('/member-login')"
+            @click="router.push('/user-login')"
             >Login
           </Button>
           <Button

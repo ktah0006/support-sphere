@@ -1,11 +1,13 @@
 <template>
   <main class="min-h-screen flex justify-center items-center">
-    <Card class="w-[350px]">
+    <Card class="w-[350px]" role="region" aria-label="log in form">
       <CardHeader>
         <div class="flex justify-center">
           <img :src="logo" alt="SupportSphere logo" class="w-32" />
         </div>
-        <CardTitle class="flex justify-center text-3xl text-[#6929FF]">Welcome Back</CardTitle>
+        <CardTitle class="hidden sm:flex justify-center text-3xl text-[#6929FF]"
+          >Welcome Back</CardTitle
+        >
       </CardHeader>
       <CardContent>
         <form>
@@ -22,7 +24,7 @@
         </form>
       </CardContent>
       <CardFooter class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
-        <Button variant="outline"> Cancel </Button>
+        <!-- <Button variant="outline"> Cancel </Button> -->
         <Button variant="bold" @click="signin">Login</Button>
       </CardFooter>
     </Card>
@@ -44,7 +46,6 @@ import { auth } from '@/firebase/init.js'
 const email = ref('')
 const password = ref('')
 const router = useRouter()
-// const auth = getAuth('')
 const signin = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
