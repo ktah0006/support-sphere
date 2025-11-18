@@ -15,15 +15,17 @@
       <CardContent>
         <form>
           <div class="grid w-full gap-4">
+            <p v-if="nameError" class="text-red-700 text-sm">{{ nameError }}</p>
             <div class="flex flex-col space-y-2">
               <Label for="name">Full Name</Label>
-              <Input type="text" id="name" placeholder="" />
+              <Input type="text" id="name" placeholder="" v-model="username" required />
             </div>
+            <p v-if="credentialError" class="text-red-700 text-sm">{{ credentialError }}</p>
             <div class="flex flex-col space-y-2">
               <Label for="email">Email</Label>
               <Input type="text" id="email" placeholder="e.g. example@mail.com" v-model="email" />
-            </div>
-            <div class="flex flex-col space-y-2">
+              <!-- </div>
+            <div class="flex flex-col space-y-2"> -->
               <Label for="password">Password</Label>
               <Input type="password" id="password" placeholder="" v-model="password" />
             </div>
@@ -59,8 +61,20 @@ import { auth } from '@/firebase/init'
 
 const email = ref('')
 const password = ref('')
+const username = ref('')
+const credentialError = ref('')
+const nameError = ref('')
+
 const router = useRouter()
+
 const register = () => {
+  credentialError.value = ''
+  nameError.value = ''
+
+  if (!username.value.trim()) {
+    nameError.value = 'Please enter a name'
+    return
+  }
   createUserWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
       console.log('Firebase Register Successful!')
@@ -68,7 +82,26 @@ const register = () => {
     })
     .catch((error) => {
       console.log(error.code)
-      alert(error.code)
+      // alert(error.code)
+
+      if (error.code == 'auth/invalid-email') {
+        credentialError.value = 'Invalid email or password. Please try again.'
+      }
+      if (error.code == 'auth/missing-email') {
+        credentialError.value = 'Please enter an email'
+      }
+      if (error.code == 'auth/missing-password') {
+        credentialError.value = 'Please enter a password'
+      }
+      if (error.code == 'auth/weak-password') {
+        credentialError.value = 'Minimum password length should be 6'
+      }
+      if (error.code == 'auth/invalid-credential') {
+        credentialError.value = 'Invalid email or password. Please try again.'
+      }
+      if (error.code == 'auth/email-already-in-use') {
+        credentialError.value = 'Email already registered.'
+      }
     })
 }
 </script>
