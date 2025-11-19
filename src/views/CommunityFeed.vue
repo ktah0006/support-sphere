@@ -22,38 +22,15 @@
 
       <CardFooter class="flex justify-between text-gray-600 text-sm mt-3 p-1">
         <div class="flex gap-3">
-          <Popover class="p-8">
-            <PopoverTrigger as-child>
-              <Button variant="rate">Rate?</Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <h4 class="flex justify-center font-medium mb-3">
-                How helpful did you find this post?
-              </h4>
-              <RadioGroup default-value="1" class="flex space-x-4 justify-center">
-                <div class="flex items-center space-x-1">
-                  <RadioGroupItem id="r1" value="1" />
-                  <Label for="r1">1</Label>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <RadioGroupItem id="r2" value="2" />
-                  <Label for="r2">2</Label>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <RadioGroupItem id="r3" value="3" />
-                  <Label for="r3">3</Label>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <RadioGroupItem id="r4" value="4" />
-                  <Label for="r4">4</Label>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <RadioGroupItem id="r5" value="5" />
-                  <Label for="r5">5</Label>
-                </div>
-              </RadioGroup>
-            </PopoverContent>
-          </Popover>
+          <!-- <Button variant="rate">Rate?</Button> -->
+          <Toggle
+            variant="outline"
+            :model-value="currentUserMarkedPost(post)"
+            @click="toggleHelpful(post.id)"
+            aria-label="Toggle bold"
+          >
+            Helpful
+          </Toggle>
         </div>
         <div class="flex gap-3">
           <Badge variant="categoryLabel"> {{ post.category }} </Badge>
@@ -68,17 +45,54 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { db } from '../firebase/init.js'
-import { collection, getDocs } from 'firebase/firestore'
+import {
+  collection,
+  getDocs,
+  increment,
+  updateDoc,
+  doc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Button from '@/components/ui/button/Button.vue'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Toggle } from '@/components/ui/toggle'
+import { userStore } from '../store/store.js'
 
 const allPosts = ref([])
+const store = userStore()
+const currentUserId = computed(() => store.userState?.uid)
+
+const currentUserMarkedPost = (p) => {
+  console.log('currentUserMarkedPost: ', p.usersMarkedBy?.includes(currentUserId.value))
+  return p.usersMarkedBy?.includes(currentUserId.value) || false
+}
+
+const toggleHelpful = async (postId) => {
+  const post = allPosts.value.find((p) => p.id === postId)
+  const postIsMarkedByUser = post.usersMarkedBy?.includes(currentUserId.value)
+  const singlePostRef = doc(db, 'Feed', postId)
+
+  if (!postIsMarkedByUser) {
+    await updateDoc(singlePostRef, {
+      usersMarkedBy: arrayUnion(currentUserId.value),
+      rating: increment(1),
+    })
+    post.rating += 1
+    post.usersMarkedBy.push(currentUserId.value)
+  } else {
+    await updateDoc(singlePostRef, {
+      usersMarkedBy: arrayRemove(currentUserId.value),
+      rating: increment(-1),
+    })
+    post.rating -= 1
+    post.usersMarkedBy = post.usersMarkedBy.filter((id) => id !== currentUserId.value)
+  }
+  console.log('Updating post:', postId, 'with rating:', post.rating)
+}
 
 const expandedPost = ref(null)
 const expandPost = (postId) => {
@@ -92,6 +106,7 @@ const expandPost = (postId) => {
 }
 
 onMounted(async () => {
+  // fetch posts from database
   const allPostsRef = collection(db, 'Feed')
   const allPostsSnapshot = await getDocs(allPostsRef)
 
