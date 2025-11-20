@@ -48,31 +48,35 @@
       </CardFooter>
     </Card>
 
-    <!-- from ShadCN -->
-    <Pagination :items-per-page="10" :total="pagesCount" :default-page="1">
+    <!-- adapted from ShadCN -->
+    <Pagination v-model="activePage" :items-per-page="10" :total="pagesCount" :default-page="1">
       <PaginationContent>
-        <!-- Prev -->
-        <!-- <PaginationItem>
-          <PaginationPrevious href="#" @click.prevent="activePage = Math.max(1, activePage - 1)" />
-        </PaginationItem> -->
-
-        <!-- Page numbers -->
+        <PaginationItem :value="Math.min(pagesCount, activePage - 1)" class="mr-6">
+          <PaginationPrevious
+            href="#"
+            :disabled="false"
+            @click.prevent="activePage = Math.max(1, activePage - 1)"
+          />
+        </PaginationItem>
         <PaginationItem v-for="p in pagesCount" :key="p" :value="p">
-          <!-- <PaginationLink href="#" :is-active="p === activePage" @click.prevent="activePage = p">
+          <!-- <PaginationItem :value="p" @click="activePage = p"> -->
+          <Button
+            variant="pagination"
+            @click="activePage = p"
+            :aria-current="p === activePage ? 'page' : undefined"
+          >
             {{ p }}
-          </PaginationLink> -->
-          <PaginationItem :value="p" @click="activePage = p">
-            {{ p }}
-          </PaginationItem>
+          </Button>
+          <!-- </PaginationItem> -->
         </PaginationItem>
 
-        <!-- Next -->
-        <!-- <PaginationItem>
+        <PaginationItem :value="Math.min(pagesCount, activePage + 1)" class="ml-4">
           <PaginationNext
             href="#"
+            :disabled="false"
             @click.prevent="activePage = Math.min(pagesCount, activePage + 1)"
           />
-        </PaginationItem> -->
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   </div>
