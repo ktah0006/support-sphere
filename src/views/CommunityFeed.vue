@@ -1,8 +1,15 @@
 <template>
   <div class="flex flex-col gap-4 mt-20 px-10 pb-8">
     <CreatePost />
-    <Card
+    <!-- <Card
       v-for="post in allPosts"
+      :key="post.id"
+      class="relative inline-block w-full rounded-lg bg-white p-6"
+      role="region"
+      aria-label="single post"
+    > -->
+    <Card
+      v-for="post in paginatedList"
       :key="post.id"
       class="relative inline-block w-full rounded-lg bg-white p-6"
       role="region"
@@ -40,6 +47,34 @@
         </div>
       </CardFooter>
     </Card>
+
+    <!-- from ShadCN -->
+    <Pagination :items-per-page="10" :total="pagesCount" :default-page="1">
+      <PaginationContent>
+        <!-- Prev -->
+        <!-- <PaginationItem>
+          <PaginationPrevious href="#" @click.prevent="activePage = Math.max(1, activePage - 1)" />
+        </PaginationItem> -->
+
+        <!-- Page numbers -->
+        <PaginationItem v-for="p in pagesCount" :key="p" :value="p">
+          <!-- <PaginationLink href="#" :is-active="p === activePage" @click.prevent="activePage = p">
+            {{ p }}
+          </PaginationLink> -->
+          <PaginationItem :value="p" @click="activePage = p">
+            {{ p }}
+          </PaginationItem>
+        </PaginationItem>
+
+        <!-- Next -->
+        <!-- <PaginationItem>
+          <PaginationNext
+            href="#"
+            @click.prevent="activePage = Math.min(pagesCount, activePage + 1)"
+          />
+        </PaginationItem> -->
+      </PaginationContent>
+    </Pagination>
   </div>
 </template>
 
@@ -61,6 +96,15 @@ import Button from '@/components/ui/button/Button.vue'
 import { Toggle } from '@/components/ui/toggle'
 import { userStore } from '../store/store.js'
 import CreatePost from './CreatePost.vue'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+  // PaginationLink,
+} from '@/components/ui/pagination'
 
 const allPosts = ref([])
 const store = userStore()
@@ -108,7 +152,6 @@ const expandPost = (postId) => {
 onMounted(async () => {
   // fetch all posts from database
   const allPostsRef = collection(db, 'Feed')
-  //  const allPostsSnapshot = await getDocs(allPostsRef)
 
   onSnapshot(allPostsRef, (allPostsSnapshot) => {
     allPosts.value = allPostsSnapshot.docs.map((doc) => ({
@@ -116,5 +159,13 @@ onMounted(async () => {
       ...doc.data(),
     }))
   })
+})
+
+const activePage = ref(1)
+const pagesCount = computed(() => Math.ceil(allPosts.value.length / 10))
+const paginatedList = computed(() => {
+  const start = (activePage.value - 1) * 10
+  const activePosts = allPosts.value.slice(start, start + 10)
+  return activePosts
 })
 </script>
