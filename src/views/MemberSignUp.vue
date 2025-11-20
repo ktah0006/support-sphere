@@ -53,11 +53,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import logo from '@/assets/ss_logo.png'
-
 import { ref } from 'vue'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase/init'
+import { db } from '@/firebase/init'
+import { setDoc, doc, Timestamp } from 'firebase/firestore'
 
 const email = ref('')
 const password = ref('')
@@ -76,9 +77,17 @@ const register = () => {
     return
   }
   createUserWithEmailAndPassword(auth, email.value, password.value)
-    .then(() => {
+    .then(async (credentials) => {
       console.log('Firebase Register Successful!')
-      router.push('/')
+
+      await setDoc(doc(db, 'Users', credentials.user.uid), {
+        fullName: username.value,
+        email: email.value,
+        createdAt: Timestamp.now(),
+      })
+      console.log('USER CREATED')
+
+      router.push('/community-feed')
     })
     .catch((error) => {
       console.log(error.code)

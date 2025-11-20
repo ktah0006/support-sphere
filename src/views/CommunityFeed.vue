@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col gap-4 mt-20 px-10">
+  <div class="flex flex-col gap-4 mt-20 px-10 pb-8">
+    <CreatePost />
     <Card
       v-for="post in allPosts"
       :key="post.id"
@@ -15,7 +16,7 @@
       </CardHeader>
       <CardContent class="p-1 gap-1">
         <p :class="expandedPost === post.id ? '' : 'line-clamp-1'">{{ post.content }}</p>
-        <Button class="text-[#6929FF] p-1" variant="link" @click="expandPost(post.id)">
+        <Button class="text-[#6929FF] p-0" variant="link" @click="expandPost(post.id)">
           {{ expandedPost === post.id ? 'Read Less' : 'Read More' }}
         </Button>
       </CardContent>
@@ -25,9 +26,10 @@
           <!-- <Button variant="rate">Rate?</Button> -->
           <Toggle
             variant="outline"
+            class="px-4 py-4"
             :model-value="currentUserMarkedPost(post)"
             @click="toggleHelpful(post.id)"
-            aria-label="Toggle bold"
+            aria-label="Rate Helpful"
           >
             Helpful
           </Toggle>
@@ -38,9 +40,6 @@
         </div>
       </CardFooter>
     </Card>
-
-    <!-- Modal only shows when a post is active -->
-    <!-- <SinglePost v-if="currentPost" :post="currentPost" @close="currentPost = null" /> -->
   </div>
 </template>
 
@@ -49,18 +48,19 @@ import { ref, onMounted, computed } from 'vue'
 import { db } from '../firebase/init.js'
 import {
   collection,
-  getDocs,
   increment,
   updateDoc,
   doc,
   arrayUnion,
   arrayRemove,
+  onSnapshot,
 } from 'firebase/firestore'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Button from '@/components/ui/button/Button.vue'
 import { Toggle } from '@/components/ui/toggle'
 import { userStore } from '../store/store.js'
+import CreatePost from './CreatePost.vue'
 
 const allPosts = ref([])
 const store = userStore()
@@ -106,13 +106,15 @@ const expandPost = (postId) => {
 }
 
 onMounted(async () => {
-  // fetch posts from database
+  // fetch all posts from database
   const allPostsRef = collection(db, 'Feed')
-  const allPostsSnapshot = await getDocs(allPostsRef)
+  //  const allPostsSnapshot = await getDocs(allPostsRef)
 
-  allPosts.value = allPostsSnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }))
+  onSnapshot(allPostsRef, (allPostsSnapshot) => {
+    allPosts.value = allPostsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+  })
 })
 </script>

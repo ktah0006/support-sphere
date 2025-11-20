@@ -31,7 +31,7 @@ export const routes = [
     path: '/member-signup',
     name: 'Sign Up',
     component: MemberSignUp,
-    meta: { authOnly: false, adminOnly: false, noAuthOnly: false, mainNav: false },
+    meta: { authOnly: false, adminOnly: false, noAuthOnly: true, mainNav: false },
   },
 
   {

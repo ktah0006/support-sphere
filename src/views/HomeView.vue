@@ -27,7 +27,10 @@
         >
       </CardHeader>
       <CardContent>
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
+        <div
+          class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full"
+          v-if="!isAuthenticated"
+        >
           <Button
             role="button"
             aria-label="sign into account"
@@ -62,5 +65,10 @@ import {
 import logo from '@/assets/ss_logo.png'
 import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
+import { userStore } from '../store/store'
+
 const router = useRouter()
+
+const user = userStore()
+const isAuthenticated = !!user.userState
 </script>
