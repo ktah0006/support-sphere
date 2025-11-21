@@ -188,6 +188,7 @@ const submitPost = async () => {
 
     await addDoc(allPostsRef, {
       author: currentUser.name || '-',
+      authorId: currentUser.userState.uid,
       category: categoryValue.value || 'General',
       content: postBody.value,
       datetime: Timestamp.now(),
@@ -195,7 +196,8 @@ const submitPost = async () => {
       title: postTitle.value,
       usersMarkedBy: [],
     })
-    console.log('Notice Saved')
+    console.log('currentUser.name: ', currentUser.name)
+    console.log('Notice Saved by ', currentUser.userState.uid)
   } catch (error) {
     console.error('Could not write to database: ', error)
   } finally {

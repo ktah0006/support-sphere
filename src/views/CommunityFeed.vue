@@ -20,6 +20,28 @@
         <Badge class="text-[#6929FF] border border-[#6929FF] px-3 bg-purple-50">
           Rating: {{ post.rating }}
         </Badge>
+
+        <Button
+          v-if="deletionAllowed(post)"
+          @click="deletePost(post)"
+          className="absolute top-2 right-4 bg-white hover:bg-transparent text-xs py-3 px-2 mt-2 mr-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M3 6H5M5 6H21M5 6V20C5 20.5304 5.21071 21.0391 5.58579 21.4142C5.96086 21.7893 6.46957 22 7 22H17C17.5304 22 18.0391 21.7893 18.4142 21.4142C18.7893 21.0391 19 20.5304 19 20V6M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M10 11V17M14 11V17"
+              stroke="#1E1E1E"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </Button>
       </CardHeader>
       <CardContent class="p-1 gap-1">
         <p :class="expandedPost === post.id ? '' : 'line-clamp-1'">{{ post.content }}</p>
@@ -93,6 +115,7 @@ import {
   arrayUnion,
   arrayRemove,
   onSnapshot,
+  deleteDoc,
 } from 'firebase/firestore'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -103,19 +126,34 @@ import CreatePost from './CreatePost.vue'
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-  // PaginationLink,
 } from '@/components/ui/pagination'
 
 const allPosts = ref([])
 const store = userStore()
 const currentUserId = computed(() => store.userState?.uid)
 
+const deletionAllowed = (post) => {
+  const userIsAdmin = store.isAdmin
+  const userOwnsPost = post.authorId === currentUserId.value
+  return userIsAdmin || userOwnsPost
+}
+
+const deletePost = async (post) => {
+  if (!post?.id) return
+  try {
+    const postRef = doc(db, 'Feed', post.id)
+    await deleteDoc(postRef)
+    console.log('post deleted successfully: ', post.id)
+  } catch (e) {
+    console.error('Error deleting notice: ', e)
+  }
+}
+
 const currentUserMarkedPost = (p) => {
-  console.log('currentUserMarkedPost: ', p.usersMarkedBy?.includes(currentUserId.value))
+  // console.log('currentUserMarkedPost: ', p.usersMarkedBy?.includes(currentUserId.value))
   return p.usersMarkedBy?.includes(currentUserId.value) || false
 }
 
