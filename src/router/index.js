@@ -43,7 +43,7 @@ export const routes = [
 
   {
     path: '/feed-analytics',
-    name: 'Analytics',
+    name: 'Admin Dashboard',
     component: FeedAnalytics,
     meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
   },

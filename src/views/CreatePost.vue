@@ -126,7 +126,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ref, computed } from 'vue'
 import { db } from '../firebase/init.js'
-import { collection, addDoc, Timestamp } from 'firebase/firestore'
+import { collection, addDoc, Timestamp, increment, doc, updateDoc } from 'firebase/firestore'
 import { userStore } from '../store/store.js'
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-vue-next'
 import {
@@ -188,6 +188,7 @@ const submitPost = async () => {
   try {
     const allPostsRef = collection(db, 'Feed')
 
+    // create new post
     await addDoc(allPostsRef, {
       author: currentUser.name || '-',
       authorId: currentUser.userState.uid,
@@ -200,6 +201,12 @@ const submitPost = async () => {
     })
     console.log('currentUser.name: ', currentUser.name)
     console.log('Notice Saved by ', currentUser.userState.uid)
+
+    // update admin statistics
+    const adminStatsRef = doc(db, 'AdminStats', 'postStats')
+    await updateDoc(adminStatsRef, {
+      totalPosts: increment(1),
+    })
   } catch (error) {
     console.error('Could not write to database: ', error)
   } finally {

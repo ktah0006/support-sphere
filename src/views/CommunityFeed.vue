@@ -242,6 +242,7 @@ onMounted(async () => {
       id: doc.id,
       ...doc.data(),
     }))
+    // console.log('=========total posts: ', allPostsSnapshot.size)
   })
 })
 

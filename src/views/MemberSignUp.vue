@@ -58,14 +58,13 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase/init'
 import { db } from '@/firebase/init'
-import { setDoc, doc, Timestamp } from 'firebase/firestore'
+import { setDoc, doc, Timestamp, updateDoc, increment } from 'firebase/firestore'
 
 const email = ref('')
 const password = ref('')
 const username = ref('')
 const credentialError = ref('')
 const nameError = ref('')
-
 const router = useRouter()
 
 const register = () => {
@@ -86,6 +85,10 @@ const register = () => {
         createdAt: Timestamp.now(),
       })
       console.log('USER CREATED')
+      const adminStatsRef = doc(db, 'AdminStats', 'userStats')
+      await updateDoc(adminStatsRef, {
+        totalUsers: increment(1),
+      })
 
       router.push('/community-feed')
     })
