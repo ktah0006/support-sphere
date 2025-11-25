@@ -8,6 +8,40 @@
       role="region"
       aria-label="single post"
     > -->
+    <div class="flex flex-col sm:flex-col md:flex-row gap-4 px-2">
+      <div class="flex flex-col sm:flex-col md:flex-row md:items-center gap-2">
+        <Label class="font-semibold">Sort: </Label>
+        <Select v-model="sortedby">
+          <SelectTrigger class="bg-[#6929FF] text-white">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="recent"> Newest First </SelectItem>
+            <SelectItem value="oldest"> Oldest First </SelectItem>
+            <SelectItem value="rated most helpful"> Most Helpful </SelectItem>
+            <SelectItem value="rated least helpful"> Least Helpful </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div class="flex flex-col sm:flex-col md:flex-row md:items-center gap-2">
+        <Label class="font-semibold">Category: </Label>
+        <Select v-model="filterCategory">
+          <SelectTrigger class="bg-[#6929FF] text-white">
+            <SelectValue placeholder="Filter by Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All"> All </SelectItem>
+            <SelectItem value="General"> General </SelectItem>
+            <SelectItem value="Mental Health"> Mental Health </SelectItem>
+            <SelectItem value="Career Growth"> Career Growth </SelectItem>
+            <SelectItem value="Life Hacks"> Life Hacks </SelectItem>
+            <SelectItem value="Social"> Social </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+
     <Card
       v-for="post in paginatedList"
       :key="post.id"
@@ -24,7 +58,7 @@
         <Button
           v-if="deletionAllowed(post)"
           @click="deletePost(post)"
-          className="absolute top-2 right-4 bg-white hover:bg-transparent text-xs py-3 px-2 mt-2 mr-2"
+          class="absolute top-2 right-4 bg-white hover:bg-transparent text-xs py-3 px-2 mt-2 mr-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +139,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { db } from '../firebase/init.js'
 import {
   collection,
@@ -130,6 +164,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 
 const allPosts = ref([])
 const store = userStore()
@@ -204,10 +246,45 @@ onMounted(async () => {
 })
 
 const activePage = ref(1)
-const pagesCount = computed(() => Math.ceil(allPosts.value.length / 10))
+const pagesCount = computed(() => Math.ceil(presentedPosts.value.length / 10))
 const paginatedList = computed(() => {
   const start = (activePage.value - 1) * 10
-  const activePosts = allPosts.value.slice(start, start + 10)
+  // const activePosts = allPosts.value.slice(start, start + 10)
+  const activePosts = presentedPosts.value.slice(start, start + 10)
   return activePosts
+})
+
+// sorting and filtering
+const sortedby = ref('recent')
+const filterCategory = ref('All')
+
+// reset page to one whenever user changes filter or sorting preferences
+const updateListWatcher = computed(() => ({
+  selectedFilter: filterCategory.value,
+  selectedSort: sortedby.value,
+}))
+watch(updateListWatcher, () => {
+  activePage.value = 1
+})
+
+// determine which posts and order in which they are displayed
+const presentedPosts = computed(() => {
+  let allPostList = [...allPosts.value]
+
+  if (filterCategory.value !== 'All') {
+    allPostList = allPostList.filter((p) => p.category === filterCategory.value)
+  }
+
+  if (sortedby.value === 'recent') {
+    allPostList.sort((post1, post2) => post2.datetime?.toMillis() - post1.datetime?.toMillis())
+  } else if (sortedby.value === 'oldest') {
+    allPostList.sort((post1, post2) => post1.datetime?.toMillis() - post2.datetime?.toMillis())
+  } else if (sortedby.value === 'rated most helpful') {
+    allPostList.sort((post1, post2) => post2.rating - post1.rating)
+  } else if (sortedby.value === 'rated least helpful') {
+    allPostList.sort((post1, post2) => post1.rating - post2.rating)
+  }
+
+  return allPostList
 })
 </script>

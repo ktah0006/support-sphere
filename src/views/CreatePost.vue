@@ -1,8 +1,9 @@
 <template>
-  <Dialog v-model:open="postModalOpen">
-    <DialogTrigger as-child>
-      <div class="flex justify-end">
-        <Button variant="bold" class="px-5 py-5">
+  <div class="flex justify-end w-full">
+    <Dialog v-model:open="postModalOpen">
+      <DialogTrigger as-child>
+        <!-- <div class="w-auto"> -->
+        <Button variant="bold" class="px-5 py-5 flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -20,90 +21,91 @@
           </svg>
           Create New Post
         </Button>
-      </div>
-    </DialogTrigger>
-    <DialogContent class="sm:max-w-[425px] bg-[#efeaf8]">
-      <form @submit.prevent="submitPost">
-        <DialogHeader>
-          <DialogTitle class="flex justify-center text-2xl">Create New Post</DialogTitle>
-          <DialogDescription> </DialogDescription>
-        </DialogHeader>
-        <div class="grid gap-4">
-          <div class="grid gap-3">
-            <Label class="text-md">Post Title</Label>
-            <Input class="border border-black" v-model="postTitle" @blur="titleValidation" />
-            <p v-if="titleErrorMessage" class="text-red-700 text-sm">{{ titleErrorMessage }}</p>
-          </div>
-          <!-- Taken from ShadCN -->
-          <Label class="text-md">Category</Label>
-          <Popover v-model:open="catListOpen">
-            <PopoverTrigger as-child>
-              <Button
-                variant="outline"
-                role="combobox"
-                :aria-expanded="catListOpen"
-                class="w-[200px] justify-between border border-black"
-              >
-                {{
-                  categoryValue
-                    ? categories.find((framework) => framework.value === categoryValue)?.label
-                    : 'Select Category...'
-                }}
-                <ChevronsUpDownIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent class="w-[200px] p-0">
-              <Command>
-                <CommandList>
-                  <CommandEmpty>No Categories found.</CommandEmpty>
-                  <CommandGroup>
-                    <CommandItem
-                      v-for="cat in categories"
-                      :key="cat.value"
-                      :value="cat.value"
-                      @select="
-                        () => {
-                          categoryValue = categoryValue === cat.value ? '' : cat.value
-                          catListOpen = false
-                        }
-                      "
-                    >
-                      <CheckIcon
-                        :class="
-                          cn(
-                            'mr-2 h-4 w-4',
-                            categoryValue === cat.value ? 'opacity-100' : 'opacity-0',
-                          )
+        <!-- </div> -->
+      </DialogTrigger>
+      <DialogContent class="sm:max-w-[425px] bg-[#efeaf8]">
+        <form @submit.prevent="submitPost">
+          <DialogHeader>
+            <DialogTitle class="flex justify-center text-2xl">Create New Post</DialogTitle>
+            <DialogDescription> </DialogDescription>
+          </DialogHeader>
+          <div class="grid gap-4">
+            <div class="grid gap-3">
+              <Label class="text-md">Post Title</Label>
+              <Input class="border border-black" v-model="postTitle" @blur="titleValidation" />
+              <p v-if="titleErrorMessage" class="text-red-700 text-sm">{{ titleErrorMessage }}</p>
+            </div>
+            <!-- Taken from ShadCN -->
+            <Label class="text-md">Category</Label>
+            <Popover v-model:open="catListOpen">
+              <PopoverTrigger as-child>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  :aria-expanded="catListOpen"
+                  class="w-[200px] justify-between border border-black"
+                >
+                  {{
+                    categoryValue
+                      ? categories.find((framework) => framework.value === categoryValue)?.label
+                      : 'Select Category...'
+                  }}
+                  <ChevronsUpDownIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-[200px] p-0">
+                <Command>
+                  <CommandList>
+                    <CommandEmpty>No Categories found.</CommandEmpty>
+                    <CommandGroup>
+                      <CommandItem
+                        v-for="cat in categories"
+                        :key="cat.value"
+                        :value="cat.value"
+                        @select="
+                          () => {
+                            categoryValue = categoryValue === cat.value ? '' : cat.value
+                            catListOpen = false
+                          }
                         "
-                      />
-                      {{ cat.label }}
-                    </CommandItem>
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <div class="grid gap-3">
-            <Label class="text-md">Body</Label>
-            <Textarea
-              class="border border-black"
-              placeholder="Type your message here..."
-              v-model="postBody"
-              @blur="bodyValidation"
-            />
-            <p v-if="bodyErrorMessage" class="text-red-700 text-sm">{{ bodyErrorMessage }}</p>
+                      >
+                        <CheckIcon
+                          :class="
+                            cn(
+                              'mr-2 h-4 w-4',
+                              categoryValue === cat.value ? 'opacity-100' : 'opacity-0',
+                            )
+                          "
+                        />
+                        {{ cat.label }}
+                      </CommandItem>
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            <div class="grid gap-3">
+              <Label class="text-md">Body</Label>
+              <Textarea
+                class="border border-black"
+                placeholder="Type your message here..."
+                v-model="postBody"
+                @blur="bodyValidation"
+              />
+              <p v-if="bodyErrorMessage" class="text-red-700 text-sm">{{ bodyErrorMessage }}</p>
+            </div>
           </div>
-        </div>
 
-        <DialogFooter class="mt-6">
-          <DialogClose as-child>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button type="submit" variant="bold">Post</Button>
-        </DialogFooter>
-      </form>
-    </DialogContent>
-  </Dialog>
+          <DialogFooter class="mt-6">
+            <DialogClose as-child>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" variant="bold">Post</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  </div>
 </template>
 
 <script setup>
@@ -137,7 +139,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 const categories = [
   { value: 'General', label: 'General' },
-  { value: 'Ask the Community', label: 'Ask the Community' },
+  // { value: 'Ask the Community', label: 'Ask the Community' },
   { value: 'Mental Health', label: 'Mental Health' },
   { value: 'Career Growth', label: 'Career Growth' },
   { value: 'Life Hacks', label: 'Life Hacks' },
