@@ -60,6 +60,7 @@
           @click="deletePost(post)"
           class="absolute top-2 right-4 bg-white hover:bg-transparent text-xs py-3 px-2 mt-2 mr-2"
         >
+          <!-- svg taken from figma -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -189,6 +190,12 @@ const deletePost = async (post) => {
     const postRef = doc(db, 'Feed', post.id)
     await deleteDoc(postRef)
     console.log('post deleted successfully: ', post.id)
+
+    // update admin statistics
+    const adminStatsRef = doc(db, 'AdminStats', 'postStats')
+    await updateDoc(adminStatsRef, {
+      totalPosts: increment(-1),
+    })
   } catch (e) {
     console.error('Error deleting notice: ', e)
   }

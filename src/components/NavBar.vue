@@ -6,7 +6,7 @@
         <DropdownMenuTrigger as-child>
           <Button @click="menuOpen = !menuOpen" class="md:hidden" variant="outline"> Menu </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent class="w-56">
+        <DropdownMenuContent class="w-56 ml-5">
           <!-- Nav Links in Dropdown -->
           <DropdownMenuItem v-for="link in allowedRoutes" :key="link.path" as-child>
             <RouterLink
@@ -70,12 +70,51 @@
         >
           Logout
         </Button>
+
+        <Popover v-if="isAuthenticated">
+          <PopoverTrigger as-child>
+            <!-- <Button variant="outline"> Open popover </Button> -->
+            <!-- svg taken from figma -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="36"
+              height="36"
+              viewBox="0 0 50 50"
+              fill="none"
+            >
+              <rect width="50" height="50" rx="25" fill="#EADDFF" />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M32.5003 20C32.5003 24.1421 29.1424 27.5 25.0003 27.5C20.8582 27.5 17.5003 24.1421 17.5003 20C17.5003 15.8579 20.8582 12.5 25.0003 12.5C29.1424 12.5 32.5003 15.8579 32.5003 20ZM30.0003 20C30.0003 22.7614 27.7617 25 25.0003 25C22.2389 25 20.0003 22.7614 20.0003 20C20.0003 17.2386 22.2389 15 25.0003 15C27.7617 15 30.0003 17.2386 30.0003 20Z"
+                fill="#4F378A"
+              />
+              <path
+                d="M25.0003 31.25C16.9073 31.25 10.0119 36.0355 7.38525 42.7401C8.02512 43.3754 8.69918 43.9765 9.40441 44.5401C11.3603 38.3846 17.4962 33.75 25.0003 33.75C32.5044 33.75 38.6403 38.3846 40.5962 44.5401C41.3014 43.9765 41.9755 43.3755 42.6154 42.7401C39.9887 36.0355 33.0933 31.25 25.0003 31.25Z"
+                fill="#4F378A"
+              />
+            </svg>
+          </PopoverTrigger>
+          <PopoverContent class="w-auto p-7 mx-5">
+            <div class="grid gap-4 text-center">
+              <h1 class="font-semibold text-lg">Account Information</h1>
+              <div class="space-y-2">
+                <h4 class="font-medium leading-none">{{ user.name }}</h4>
+                <p class="text-sm">{{ user.email }}</p>
+              </div>
+              <div class="flex justify-center">
+                <Badge variant="adminLabel" v-if="isAdmin"> Admin Acccount </Badge>
+                <Badge variant="adminLabel" v-if="!isAdmin"> Member Acccount </Badge>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   </nav>
 </template>
 
-<script setup lang="js">
+<script setup>
 import { Badge } from '@/components/ui/badge'
 import {
   NavigationMenu,
@@ -83,7 +122,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -91,6 +129,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()

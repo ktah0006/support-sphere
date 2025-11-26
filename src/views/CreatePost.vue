@@ -2,8 +2,8 @@
   <div class="flex justify-end w-full">
     <Dialog v-model:open="postModalOpen">
       <DialogTrigger as-child>
-        <!-- <div class="w-auto"> -->
         <Button variant="bold" class="px-5 py-5 flex items-center gap-2">
+          <!-- svg taken from figma -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="23"
