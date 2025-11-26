@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-5 mt-20 mx-30">
+  <div class="flex flex-col sm:flex-row gap-5 mt-20 mx-30">
     <Card class="w-60 flex px-4">
       <div class="flex flex-col ml-2 py-0 gap-2">
         <p class="font-medium text-xl">Total Users</p>
@@ -81,11 +81,11 @@
           <!-- </PaginationItem> -->
         </PaginationItem>
 
-        <PaginationItem :value="Math.min(userPagesCount, activePage + 1)" class="ml-4">
+        <PaginationItem :value="Math.min(userPagesCount, activeUserPage + 1)" class="ml-4">
           <PaginationNext
             href="#"
             :disabled="false"
-            @click.prevent="activePage = Math.min(userPagesCount, activePage + 1)"
+            @click.prevent="activeUserPage = Math.min(userPagesCount, activeUserPage + 1)"
           />
         </PaginationItem>
       </PaginationContent>
@@ -122,6 +122,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { Button } from '@/components/ui/button'
 
 const totalPosts = ref(null)
 const totalUsers = ref(null)

@@ -61,7 +61,7 @@
         >
           Sign up
         </Button>
-        <Button
+        <!-- <Button
           role="button"
           aria-label="lougout of account"
           variant="destructive"
@@ -69,7 +69,7 @@
           v-if="isAuthenticated"
         >
           Logout
-        </Button>
+        </Button> -->
 
         <Popover v-if="isAuthenticated">
           <PopoverTrigger as-child>
@@ -106,6 +106,19 @@
                 <Badge variant="adminLabel" v-if="isAdmin"> Admin Acccount </Badge>
                 <Badge variant="adminLabel" v-if="!isAdmin"> Member Acccount </Badge>
               </div>
+            </div>
+
+            <div class="flex justify-center mt-6">
+              <Button
+                role="button"
+                aria-label="logout of account"
+                variant="destructive"
+                class="h-7 w-16 px-3"
+                @click="logout"
+                v-if="isAuthenticated"
+              >
+                Logout
+              </Button>
             </div>
           </PopoverContent>
         </Popover>

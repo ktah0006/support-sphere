@@ -4,7 +4,7 @@ import UserLogin from '@/views/UserLogin.vue'
 import CommunityFeed from '@/views/CommunityFeed.vue'
 import FeedAnalytics from '@/views/FeedAnalytics.vue'
 import MemberSignUp from '@/views/MemberSignUp.vue'
-import UserManager from '@/views/UserManager.vue'
+// import UserManager from '@/views/UserManager.vue'
 import { userStore } from '../store/store'
 
 export const routes = [
@@ -48,12 +48,12 @@ export const routes = [
     meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
   },
 
-  {
-    path: '/user-manager',
-    name: 'User Manager',
-    component: UserManager,
-    meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
-  },
+  // {
+  //   path: '/user-manager',
+  //   name: 'User Manager',
+  //   component: UserManager,
+  //   meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
+  // },
 ]
 
 const router = createRouter({
