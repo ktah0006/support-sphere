@@ -1,9 +1,9 @@
 <template>
-  <main class="min-h-screen flex justify-center items-center">
+  <main class="min-h-screen flex justify-center items-center" id="main-content">
     <Card class="w-[350px]" role="region" aria-label="sign up form">
       <CardHeader>
         <div class="flex justify-center">
-          <img :src="logo" alt="SupportSphere logo" class="w-32" />
+          <img :src="logo" alt="SupportSphere logo" class="w-32" aria-hidden="true" />
         </div>
         <CardTitle class="hidden sm:flex justify-center text-3xl text-[#6929FF]"
           >Create Account</CardTitle
@@ -15,19 +15,27 @@
       <CardContent>
         <form>
           <div class="grid w-full gap-4">
-            <p v-if="nameError" class="text-red-700 text-sm">{{ nameError }}</p>
+            <p v-if="nameError" role="alert" class="text-red-700 text-sm">{{ nameError }}</p>
             <div class="flex flex-col space-y-2">
               <Label for="name">Full Name</Label>
-              <Input type="text" id="name" placeholder="" v-model="username" required />
+              <Input type="text" id="name" aria-required="true" v-model="username" required />
             </div>
-            <p v-if="credentialError" class="text-red-700 text-sm">{{ credentialError }}</p>
+            <p v-if="credentialError" role="alert" class="text-red-700 text-sm">
+              {{ credentialError }}
+            </p>
             <div class="flex flex-col space-y-2">
               <Label for="email">Email</Label>
-              <Input type="text" id="email" placeholder="e.g. example@mail.com" v-model="email" />
+              <Input
+                type="text"
+                id="email"
+                aria-required="true"
+                placeholder="e.g. example@mail.com"
+                v-model="email"
+              />
               <!-- </div>
             <div class="flex flex-col space-y-2"> -->
               <Label for="password">Password</Label>
-              <Input type="password" id="password" placeholder="" v-model="password" />
+              <Input type="password" id="password" aria-required="true" v-model="password" />
             </div>
           </div>
         </form>

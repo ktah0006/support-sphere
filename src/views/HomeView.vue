@@ -10,7 +10,7 @@
     >
       <CardHeader>
         <div class="flex justify-center">
-          <img :src="logo" alt="SupportSphere logo" class="w-32" />
+          <img :src="logo" alt="SupportSphere logo" class="w-32" aria-hidden="true" />
         </div>
         <CardTitle
           ><h1
@@ -60,7 +60,7 @@
           </Button>
         </div>
       </CardContent>
-      <CardFooter class="sr-only"> end of the welcome page </CardFooter>
+      <CardFooter class="sr-only"> end of the home page </CardFooter>
     </Card>
   </main>
 </template>

@@ -1,96 +1,105 @@
 <template>
-  <div class="flex flex-col sm:flex-row gap-5 mt-20 mx-30">
-    <Card class="w-60 flex px-4">
-      <div class="flex flex-col ml-2 py-0 gap-2">
-        <p class="font-medium text-xl">Total Users</p>
-        <p class="text-4xl font-medium text-[#6929FF]">
-          {{ totalUsers }}
-        </p>
-        <CardFooter class="pl-0 text-sm">Regular Members </CardFooter>
-      </div>
-    </Card>
-    <Card class="w-60 flex px-4">
-      <div class="flex flex-col ml-2 py-0 gap-2">
-        <p class="font-medium text-xl">Total Posts</p>
-        <p class="text-4xl font-medium text-[#6929FF]">
-          {{ totalPosts }}
-        </p>
-        <CardFooter class="pl-0 text-sm">Posts on Support Sphere</CardFooter>
-      </div>
-    </Card>
-  </div>
-
-  <Card class="flex mx-30 px-5 mt-5">
-    <CardTitle>List of Users (Admins and Regular Members)</CardTitle>
-    <div class="flex flex-col sm:flex-col md:flex-row md:items-center gap-2">
-      <Label class="font-semibold">Sort: </Label>
-      <Select v-model="userSortedby">
-        <SelectTrigger class="bg-[#6929FF] text-white">
-          <SelectValue placeholder="Sort by" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="newest user"> Newest First </SelectItem>
-          <SelectItem value="oldest user"> Oldest First </SelectItem>
-          <SelectItem value="alphabetical (ascending)"> Name (Ascending) </SelectItem>
-          <SelectItem value="alphabetical (descending)"> Name (Dessceding) </SelectItem>
-        </SelectContent>
-      </Select>
+  <main>
+    <div class="flex flex-col sm:flex-row gap-5 mt-20 mx-30">
+      <Card class="w-60 flex px-4" role="region" aria-label="user statistics">
+        <div class="flex flex-col ml-2 py-0 gap-2">
+          <p class="font-medium text-xl">Total Users</p>
+          <p class="text-4xl font-medium text-[#6929FF]">
+            {{ totalUsers }}
+          </p>
+          <CardFooter class="pl-0 text-sm">Regular Members </CardFooter>
+        </div>
+      </Card>
+      <Card class="w-60 flex px-4" role="region" aria-label="post statistics">
+        <div class="flex flex-col ml-2 py-0 gap-2">
+          <p class="font-medium text-xl">Total Posts</p>
+          <p class="text-4xl font-medium text-[#6929FF]">
+            {{ totalPosts }}
+          </p>
+          <CardFooter class="pl-0 text-sm">Posts on Support Sphere</CardFooter>
+        </div>
+      </Card>
     </div>
-    <Table>
-      <TableHeader class="bg-white">
-        <TableRow>
-          <TableHead class="font-bold text-[#6929FF]"> Username </TableHead>
-          <TableHead class="font-bold text-[#6929FF]">Email</TableHead>
-          <TableHead class="font-bold text-[#6929FF]">Date Created</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <!-- <TableRow class="bg-white" v-for="u in presentedUsers" :key="u.id"> -->
-        <TableRow class="bg-white" v-for="u in userPaginatedList" :key="u.id">
-          <TableCell>{{ u.fullName }}</TableCell>
-          <TableCell>{{ u.email }}</TableCell>
-          <TableCell>{{ new Date(u.createdAt.seconds * 1000).toLocaleDateString() }}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
 
-    <!-- adapted from ShadCN -->
-    <Pagination
-      v-model="activeUserPage"
-      :items-per-page="10"
-      :total="userPagesCount"
-      :default-page="1"
+    <Card
+      class="flex mx-30 px-5 mt-5"
+      role="region"
+      aria-label="list of users' names, emails, and date created"
     >
-      <PaginationContent>
-        <PaginationItem :value="Math.min(userPagesCount, activeUserPage - 1)" class="mr-6">
-          <PaginationPrevious
-            href="#"
-            :disabled="false"
-            @click.prevent="activeUserPage = Math.max(1, activeUserPage - 1)"
-          />
-        </PaginationItem>
-        <PaginationItem v-for="p in userPagesCount" :key="p" :value="p">
-          <!-- <PaginationItem :value="p" @click="activePage = p"> -->
-          <Button
-            variant="pagination"
-            @click="activeUserPage = p"
-            :aria-current="p === activeUserPage ? 'page' : undefined"
-          >
-            {{ p }}
-          </Button>
-          <!-- </PaginationItem> -->
-        </PaginationItem>
+      <CardTitle>List of Users (Admins and Regular Members)</CardTitle>
+      <div class="flex flex-col sm:flex-col md:flex-row md:items-center gap-2">
+        <Label class="font-semibold">Sort: </Label>
+        <Select v-model="userSortedby">
+          <SelectTrigger class="bg-[#6929FF] text-white">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest user"> Newest First </SelectItem>
+            <SelectItem value="oldest user"> Oldest First </SelectItem>
+            <SelectItem value="alphabetical (ascending)"> Name (Ascending) </SelectItem>
+            <SelectItem value="alphabetical (descending)"> Name (Dessceding) </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <Table role="table">
+        <TableHeader class="bg-white">
+          <TableRow>
+            <TableHead class="font-bold text-[#6929FF]" role="columnheader"> Username </TableHead>
+            <TableHead class="font-bold text-[#6929FF]" role="columnheader">Email</TableHead>
+            <TableHead class="font-bold text-[#6929FF]" role="columnheader">Date Created</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <!-- <TableRow class="bg-white" v-for="u in presentedUsers" :key="u.id"> -->
+          <TableRow class="bg-white" v-for="u in userPaginatedList" :key="u.id">
+            <TableCell>{{ u.fullName }}</TableCell>
+            <TableCell>{{ u.email }}</TableCell>
+            <TableCell>{{ new Date(u.createdAt.seconds * 1000).toLocaleDateString() }}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
 
-        <PaginationItem :value="Math.min(userPagesCount, activeUserPage + 1)" class="ml-4">
-          <PaginationNext
-            href="#"
-            :disabled="false"
-            @click.prevent="activeUserPage = Math.min(userPagesCount, activeUserPage + 1)"
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
-  </Card>
+      <!-- adapted from ShadCN -->
+      <Pagination
+        v-model="activeUserPage"
+        :items-per-page="10"
+        :total="userPagesCount"
+        :default-page="1"
+        aria-label="pagination"
+      >
+        <PaginationContent>
+          <PaginationItem :value="Math.min(userPagesCount, activeUserPage - 1)" class="mr-6">
+            <PaginationPrevious
+              href="#"
+              :disabled="false"
+              aria-label="previous page button"
+              @click.prevent="activeUserPage = Math.max(1, activeUserPage - 1)"
+            />
+          </PaginationItem>
+          <PaginationItem v-for="p in userPagesCount" :key="p" :value="p">
+            <!-- <PaginationItem :value="p" @click="activePage = p"> -->
+            <Button
+              variant="pagination"
+              @click="activeUserPage = p"
+              :aria-current="p === activeUserPage ? 'page' : undefined"
+            >
+              {{ p }}
+            </Button>
+            <!-- </PaginationItem> -->
+          </PaginationItem>
+
+          <PaginationItem :value="Math.min(userPagesCount, activeUserPage + 1)" class="ml-4">
+            <PaginationNext
+              href="#"
+              :disabled="false"
+              aria-label="next page button"
+              @click.prevent="activeUserPage = Math.min(userPagesCount, activeUserPage + 1)"
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </Card>
+  </main>
 </template>
 
 <script setup>

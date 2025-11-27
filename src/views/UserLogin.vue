@@ -1,9 +1,9 @@
 <template>
-  <main class="min-h-screen flex justify-center items-center">
+  <main class="min-h-screen flex justify-center items-center" id="main-content">
     <Card class="w-[350px]" role="region" aria-label="log in form">
       <CardHeader>
         <div class="flex justify-center">
-          <img :src="logo" alt="SupportSphere logo" class="w-32" />
+          <img :src="logo" alt="SupportSphere logo" class="w-32" aria-hidden="true" />
         </div>
         <CardTitle class="hidden sm:flex justify-center text-3xl text-[#6929FF]"
           >Welcome Back</CardTitle
@@ -12,14 +12,29 @@
       <CardContent>
         <form>
           <div class="grid w-full gap-4">
-            <p v-if="credentialError" class="text-red-700 text-sm">{{ credentialError }}</p>
+            <p v-if="credentialError" role="alert" class="text-red-700 text-sm">
+              {{ credentialError }}
+            </p>
             <div class="flex flex-col space-y-2">
               <Label for="email">Email</Label>
-              <Input type="text" id="email" placeholder="e.g. example@mail.com" v-model="email" />
+              <Input
+                type="text"
+                id="email"
+                placeholder="e.g. example@mail.com"
+                aria-required="true"
+                aria-describedby="credential-error"
+                v-model="email"
+              />
             </div>
             <div class="flex flex-col space-y-2">
               <Label for="password">Password</Label>
-              <Input type="password" id="password" placeholder="" v-model="password" />
+              <Input
+                type="password"
+                id="password"
+                aria-required="true"
+                aria-describedby="credential-error"
+                v-model="password"
+              />
             </div>
           </div>
         </form>
