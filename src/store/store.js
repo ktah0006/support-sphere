@@ -22,9 +22,16 @@ export const userStore = defineStore('userState', {
     },
     authenticationComplete() {
       this.authComplete = true
+      if (this._authReadyResolver) {
+        this._authReadyResolver()
+        this._authReadyResolver = null
+      }
     },
     isAuthReady() {
-      return this.authComplete
+      if (this.authComplete) return Promise.resolve()
+      return new Promise((resolve) => {
+        this._authReadyResolver = resolve
+      })
     },
   },
 })

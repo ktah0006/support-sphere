@@ -4,7 +4,6 @@ import UserLogin from '@/views/UserLogin.vue'
 import CommunityFeed from '@/views/CommunityFeed.vue'
 import FeedAnalytics from '@/views/FeedAnalytics.vue'
 import MemberSignUp from '@/views/MemberSignUp.vue'
-// import UserManager from '@/views/UserManager.vue'
 import { userStore } from '../store/store'
 
 export const routes = [
@@ -14,12 +13,6 @@ export const routes = [
     component: HomeView,
     meta: { authOnly: false, adminOnly: false, noAuthOnly: false, mainNav: true },
   },
-  // {
-  //   path: '/admin-login',
-  //   name: 'adminLogin',
-  //   component: AdminLogin,
-  //   meta: { authOnly: false, adminOnly: false },
-  // },
   {
     path: '/user-login',
     name: 'Login',
@@ -47,13 +40,6 @@ export const routes = [
     component: FeedAnalytics,
     meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
   },
-
-  // {
-  //   path: '/user-manager',
-  //   name: 'User Manager',
-  //   component: UserManager,
-  //   meta: { authOnly: true, adminOnly: true, noAuthOnly: false, mainNav: true },
-  // },
 ]
 
 const router = createRouter({
@@ -62,12 +48,10 @@ const router = createRouter({
 })
 
 // only allow login and signup pages if user is not logged in
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const user = userStore()
 
-  if (!user.isAuthReady()) {
-    return next()
-  }
+  await user.isAuthReady()
 
   const isAuthenticated = !!user.userState
   const isAdmin = user.isAdmin
