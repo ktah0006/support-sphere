@@ -137,6 +137,8 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import DOMPurify from 'dompurify'
+
 const categories = [
   { value: 'General', label: 'General' },
   // { value: 'Ask the Community', label: 'Ask the Community' },
@@ -188,15 +190,20 @@ const submitPost = async () => {
   try {
     const allPostsRef = collection(db, 'Feed')
 
+    const safeTitle = DOMPurify.sanitize(postTitle.value)
+    const safeBody = DOMPurify.sanitize(postBody.value)
+
     // create new post
     await addDoc(allPostsRef, {
       author: currentUser.name || '-',
       authorId: currentUser.userState.uid,
       category: categoryValue.value || 'General',
-      content: postBody.value,
+      // content: postBody.value,
+      content: safeBody,
       datetime: Timestamp.now(),
       rating: 0,
-      title: postTitle.value,
+      // title: postTitle.value,
+      title: safeTitle,
       usersMarkedBy: [],
     })
     console.log('currentUser.name: ', currentUser.name)

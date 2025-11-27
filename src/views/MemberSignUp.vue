@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router'
 import { auth } from '@/firebase/init'
 import { db } from '@/firebase/init'
 import { setDoc, doc, Timestamp, updateDoc, increment } from 'firebase/firestore'
+import DOMPurify from 'dompurify'
 
 const email = ref('')
 const password = ref('')
@@ -80,8 +81,8 @@ const register = () => {
       console.log('Firebase Register Successful!')
 
       await setDoc(doc(db, 'Users', credentials.user.uid), {
-        fullName: username.value,
-        email: email.value,
+        fullName: DOMPurify.sanitize(username.value),
+        email: DOMPurify.sanitize(email.value),
         createdAt: Timestamp.now(),
       })
       console.log('USER CREATED')
