@@ -47,6 +47,18 @@
             Sign up
           </Button>
         </div>
+        <div
+          class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full"
+          v-if="isAuthenticated"
+        >
+          <Button
+            role="button"
+            aria-label="go to community feed"
+            variant="bold"
+            @click="router.push('/community-feed')"
+            >Community Feed
+          </Button>
+        </div>
       </CardContent>
       <CardFooter class="sr-only"> end of the welcome page </CardFooter>
     </Card>
