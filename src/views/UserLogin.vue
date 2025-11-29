@@ -1,5 +1,6 @@
 <template>
   <main class="min-h-screen flex justify-center items-center" id="main-content">
+    <!-- adapted from ShadCN -->
     <Card class="w-[350px]" role="region" aria-label="log in form">
       <CardHeader>
         <div class="flex justify-center">
@@ -7,6 +8,9 @@
         </div>
         <CardTitle class="hidden sm:flex justify-center text-3xl text-[#6929FF]"
           >Welcome Back</CardTitle
+        >
+        <CardDescription class="flex justify-center text-black"
+          >Admin and Member Login</CardDescription
         >
       </CardHeader>
       <CardContent>
@@ -39,8 +43,11 @@
           </div>
         </form>
       </CardContent>
-      <CardFooter class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
+      <CardFooter class="flex flex-col justify-center items-center gap-4 w-full">
         <Button variant="bold" @click="signin">Login</Button>
+        <p class="hidden sm:flex justify-center text-center text-xs max-w-[245px] mt-3">
+          Please contact the Database Administrator if you have forgotten your password
+        </p>
       </CardFooter>
     </Card>
   </main>
@@ -48,7 +55,14 @@
 
 <script setup>
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import logo from '@/assets/ss_logo.png'
@@ -85,9 +99,6 @@ const signin = () => {
       if (error.code == 'auth/missing-password') {
         credentialError.value = 'Please enter a password'
       }
-      // if (error.code == 'auth/weak-password') {
-      //   generalError.value = 'Please enter a stronger password'
-      // }
       if (error.code == 'auth/invalid-credential') {
         credentialError.value = 'Invalid email or password. Please try again.'
       }

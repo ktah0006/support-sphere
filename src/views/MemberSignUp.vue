@@ -1,5 +1,6 @@
 <template>
   <main class="min-h-screen flex justify-center items-center" id="main-content">
+    <!-- adapted from ShadCN -->
     <Card class="w-[350px]" role="region" aria-label="sign up form">
       <CardHeader>
         <div class="flex justify-center">
@@ -32,17 +33,17 @@
                 placeholder="e.g. example@mail.com"
                 v-model="email"
               />
-              <!-- </div>
-            <div class="flex flex-col space-y-2"> -->
               <Label for="password">Password</Label>
               <Input type="password" id="password" aria-required="true" v-model="password" />
             </div>
           </div>
         </form>
       </CardContent>
-      <CardFooter class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full">
-        <!-- <Button variant="outline"> Cancel </Button> -->
+      <CardFooter class="flex flex-col justify-center items-center gap-4 w-full">
         <Button variant="bold" @click="register">Create Account</Button>
+        <p class="hidden sm:flex justify-center text-center text-xs max-w-[245px] mt-3">
+          Please contact the Database Administrator to Create an Admin Account
+        </p>
       </CardFooter>
     </Card>
   </main>
@@ -103,7 +104,6 @@ const register = () => {
     })
     .catch((error) => {
       console.log(error.code)
-      // alert(error.code)
 
       if (error.code == 'auth/invalid-email') {
         credentialError.value = 'Invalid email or password. Please try again.'

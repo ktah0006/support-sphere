@@ -213,11 +213,9 @@ const submitPost = async () => {
       author: currentUser.name || '-',
       authorId: currentUser.userState.uid,
       category: categoryValue.value || 'General',
-      // content: postBody.value,
       content: safeBody,
       datetime: Timestamp.now(),
       rating: 0,
-      // title: postTitle.value,
       title: safeTitle,
       usersMarkedBy: [],
     })

@@ -1,4 +1,3 @@
-<!-- Component adapted from ShadCN UI -->
 <template>
   <nav class="bg-white shadow fixed top-0 inset-x-0 z-50">
     <div class="flex h-16 items-center justify-between px-5">
@@ -7,7 +6,7 @@
           <Button @click="menuOpen = !menuOpen" class="md:hidden" variant="outline"> Menu </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="w-56 ml-5">
-          <!-- Nav Links in Dropdown -->
+          <!-- Inside Dropdown -->
           <DropdownMenuItem v-for="link in allowedRoutes" :key="link.path" as-child>
             <RouterLink
               :to="link.path"
@@ -61,19 +60,9 @@
         >
           Sign up
         </Button>
-        <!-- <Button
-          role="button"
-          aria-label="lougout of account"
-          variant="destructive"
-          @click="logout"
-          v-if="isAuthenticated"
-        >
-          Logout
-        </Button> -->
 
         <Popover v-if="isAuthenticated">
           <PopoverTrigger as-child>
-            <!-- <Button variant="outline"> Open popover </Button> -->
             <!-- svg taken from figma -->
             <svg
               xmlns="http://www.w3.org/2000/svg"

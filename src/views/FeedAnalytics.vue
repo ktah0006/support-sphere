@@ -136,12 +136,13 @@ import { Button } from '@/components/ui/button'
 const totalPosts = ref(null)
 const totalUsers = ref(null)
 const usersList = ref([])
+
+// fetch from database
 onMounted(async () => {
   const postStatsRef = doc(db, 'AdminStats', 'postStats')
   const postStatSnap = await getDoc(postStatsRef)
 
   if (postStatSnap.exists()) {
-    // console.log('total posts: ', postStatSnap.data().totalPosts)
     totalPosts.value = postStatSnap.data().totalPosts
   }
 
@@ -159,6 +160,7 @@ onMounted(async () => {
   }))
 })
 
+// sorting
 const userSortedby = ref('newest user')
 const presentedUsers = computed(() => {
   let presentUsersLists = [...usersList.value]
@@ -180,11 +182,11 @@ const presentedUsers = computed(() => {
   return presentUsersLists
 })
 
+// pagination
 const activeUserPage = ref(1)
 const userPagesCount = computed(() => Math.ceil(presentedUsers.value.length / 10))
 const userPaginatedList = computed(() => {
   const start = (activeUserPage.value - 1) * 10
-  // const activePosts = allPosts.value.slice(start, start + 10)
   const activePosts = presentedUsers.value.slice(start, start + 10)
   return activePosts
 })

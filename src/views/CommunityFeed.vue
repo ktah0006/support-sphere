@@ -5,6 +5,7 @@
       <div class="flex flex-col sm:flex-col md:flex-row gap-4 px-2">
         <div class="flex flex-col sm:flex-col md:flex-row md:items-center gap-2">
           <Label class="font-semibold">Sort: </Label>
+          <!-- adapted from ShadCN -->
           <Select v-model="sortedby" aria-label="sort posts by">
             <SelectTrigger class="bg-[#6929FF] text-white">
               <SelectValue placeholder="Sort by" />
@@ -258,7 +259,6 @@ onMounted(async () => {
       id: doc.id,
       ...doc.data(),
     }))
-    // console.log('=========total posts: ', allPostsSnapshot.size)
   })
 })
 
@@ -266,7 +266,6 @@ const activePage = ref(1)
 const pagesCount = computed(() => Math.ceil(presentedPosts.value.length / 10))
 const paginatedList = computed(() => {
   const start = (activePage.value - 1) * 10
-  // const activePosts = allPosts.value.slice(start, start + 10)
   const activePosts = presentedPosts.value.slice(start, start + 10)
   return activePosts
 })
